@@ -89,10 +89,9 @@ sum(mcmcRun$mu0 > mcmcRun$mu1)/length(mcmcRun$mu1)
 library(hisse)
 library(geiger)
 
-setwd("~/Desktop/Research Projects/Macroevolution/Demo_Scripts/data")
-grunt.tree <- read.tree("grunts.phy")
+grunt.tree <- read.tree("./data/grunts.phy")
 
-grunt.data <- read.csv("grunts.csv", row.names = 1)
+grunt.data <- read.csv("./data/grunts.csv", row.names = 1)
 head(grunt.data)
 
 name.check(grunt.tree, grunt.data)
