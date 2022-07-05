@@ -89,6 +89,7 @@ sum(mcmcRun$mu0 > mcmcRun$mu1)/length(mcmcRun$mu1)
 library(hisse)
 library(geiger)
 
+#setwd("~/Desktop/Research Projects/Macroevolution/Demo_Scripts/data")
 grunt.tree <- read.tree("./data/grunts.phy")
 
 grunt.data <- read.csv("./data/grunts.csv", row.names = 1)
@@ -99,19 +100,19 @@ name.check(grunt.tree, grunt.data)
 hd<-cbind(rownames(grunt.data), grunt.data[,"habitat"])
 
 #####????
-trans.rates.hisse <- TransMatMaker(hidden.states=TRUE)
+trans.rates.hisse <- TransMatMaker.old(hidden.states=TRUE)
 trans.rates.hisse <- ParDrop(trans.rates.hisse, c(3,5,8,10))
 trans.rates.hisse[!is.na(trans.rates.hisse) & !trans.rates.hisse == 0] = 1
-null.2.hisse <- hisse(grunt.tree, hd, hidden.states=TRUE, turnover.anc=c(1,1,2,2), eps.anc=c(1,1,2,2), trans.rate=trans.rates.hisse)
+null.2.hisse <- hisse(grunt.tree, hd, hidden.states=TRUE, turnover=c(1,1,2,2), eps=c(1,1,2,2), trans.rate=trans.rates.hisse)
 
 null.logL <- null.2.hisse$loglik
 null.AIC <- null.2.hisse$AIC
 
 
-trans.rates.bisse <- TransMatMaker(hidden.states=FALSE)
+trans.rates.bisse <- TransMatMaker.old(hidden.states=FALSE)
 trans.rates.bisse
 
-pp.bisse.no.hidden <- hisse(grunt.tree, hd, hidden.states=FALSE, turnover.anc=c(1,2,0,0), eps.anc=c(1,2,0,0), trans.rate=trans.rates.bisse, output.type="raw")
+pp.bisse.no.hidden <- hisse(grunt.tree, hd, hidden.states=FALSE, turnover=c(1,2), eps=c(1,2), trans.rate=trans.rates.bisse)
 
 pp.bisse.no.hidden
 
@@ -125,8 +126,8 @@ res <- as.data.frame(logL, row.names = c("null", "BiSSE"))
 res$AIC <- AIC
 res
 
-trans.rates.bisse <- TransMatMaker(hidden.states=FALSE)
-bisse.null <- hisse(grunt.tree, hd, hidden.states=FALSE, turnover.anc=c(1,1,0,0), eps.anc=c(1,1,0,0), trans.rate=trans.rates.bisse, output.type="raw")
+trans.rates.bisse <- TransMatMaker.old(hidden.states=FALSE)
+bisse.null <- hisse(grunt.tree, hd, hidden.states=FALSE, turnover=c(1,1), eps=c(1,1), trans.rate=trans.rates.bisse)
 
 bisse.null
 
@@ -140,11 +141,11 @@ row.names(res) <- c("bisse null", "hisse null", "habitat dependent")
 res
 
 
-trans.rates.hisse <- TransMatMaker(hidden.states=TRUE)
+trans.rates.hisse <- TransMatMaker.old(hidden.states=TRUE)
 trans.rates.hisse <- ParDrop(trans.rates.hisse, c(2,3,5,7,8,9,10,12))
 
 
-hisse.grunts <- hisse(grunt.tree, hd, hidden.states=TRUE, turnover.anc=c(1,2,0,3), eps.anc=c(1,2,0,3), trans.rate=trans.rates.hisse, output.type="raw")
+hisse.grunts <- hisse(grunt.tree, hd, hidden.states=TRUE, turnover=c(1,2,0,3), eps=c(1,2,0,3), trans.rate=trans.rates.hisse)
 
 
 hisse.logL <- hisse.grunts$loglik
